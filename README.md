@@ -10,7 +10,11 @@ situations.
 
 ## Inputs
 
-No input.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| common\_tags | A map of tags to be added to all resources | `map(string)` | `{}` | no |
+| name | The name for this module | `string` | `"terraform-init"` | no |
+| user\_tags | Additional tags for the iam user | `map(string)` | `{}` | no |
 
 ## Outputs
 
