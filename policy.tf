@@ -1,3 +1,9 @@
+# ------------------------------------------------------------------------------
+# CREATE AN AWS IAM POLICY DOCUMENT
+# Create the terraform-init AWS IAM policy document that provides the resouce
+# permissions for the bootstrap terraform-init user.
+# ------------------------------------------------------------------------------
+
 data "aws_iam_policy_document" "terraform_init" {
 
   statement {
@@ -22,8 +28,14 @@ data "aws_iam_policy_document" "terraform_init" {
   }
 }
 
+# ------------------------------------------------------------------------------
+# CREATE AN AWS IAM POLICY
+# Create the terraform-init user AWS IAM policy from the IAM policy document.
+# This policy gets attached to the terraform-init user.
+# ------------------------------------------------------------------------------
+
 resource "aws_iam_policy" "terraform_init_user" {
-  name   = "terraform_init_policy"
+  name   = format("%s_policy", var.name)
   path   = "/"
   policy = data.aws_iam_policy_document.terraform_init.json
 }

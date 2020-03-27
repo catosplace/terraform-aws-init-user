@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# SET THE TERRAFORM BACKEND
-# We use the local backend for bootstrap purposes.
+# CONFIGURE TERRAFORM PROVIDERS
 # ------------------------------------------------------------------------------
 
-terraform {
-  backend "local" {}
+provider "aws" {
+  version = ">= 2.54"
+  region  = var.default_region
 }

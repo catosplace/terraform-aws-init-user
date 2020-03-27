@@ -5,7 +5,7 @@
 
 output "user_id" {
   description = "The terraform-init user identifier"
-  value       = aws_iam_user.terraform_init.id
+  value       = module.terraform_init.user_id
 }
 
 # ------------------------------------------------------------------------------
@@ -15,10 +15,10 @@ output "user_id" {
 
 output "user_access_key" {
   description = "Generated terraform-init user AWS Access Key"
-  value       = aws_iam_access_key.terraform_init_user.id
+  value       = module.terraform_init.user_access_key
 }
 
 output "user_secret_access_key" {
   description = "Generated terraform-init user AWS Secret Access Key"
-  value       = aws_iam_access_key.terraform_init_user.secret
+  value       = module.terraform_init.user_secret_access_key
 }
