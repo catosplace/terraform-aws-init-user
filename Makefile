@@ -2,12 +2,19 @@ AWS_VAULT_PROFILE=devops
 
 default: validate 
 
-all: validate check docs
+all: validate check compliance docs
 
 check:
 	@echo "Checking with Checkov..."
 	@docker run -t -v ${PWD}:/tf bridgecrew/checkov -d /tf
 	@echo "[OK] Checkov Checking Completed!"
+
+compliance: plan 
+	@echo "Checking Compliance..."
+	@docker run --rm -v ${PWD}:/target -i -t \
+		eerkunt/terraform-compliance -p plan.out -f test/compliance
+	@rm -f plan.out.json
+	@echo "[OK] Compliance Checking Completed!"
 
 deep_lint:
 	@echo "Deep Linting Terraform..."
@@ -34,7 +41,7 @@ lint:
 
 plan:
 	@echo "Running Plan..."
-	@aws-vault --debug exec $(AWS_VAULT_PROFILE) -- terraform plan
+	@aws-vault --debug exec $(AWS_VAULT_PROFILE) -- terraform plan -out plan.out
 	@echo "[OK] Plan Completed!"
 
 validate: fmt lint
@@ -42,4 +49,4 @@ validate: fmt lint
 	@terraform validate
 	@echo "[OK] Validation Completed!"
 
-PHONY: all check deep_lint docs fmt lint plan validate 
+PHONY: all check compliance deep_lint docs fmt lint plan validate 
