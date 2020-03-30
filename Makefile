@@ -9,6 +9,12 @@ check:
 	@docker run -t -v ${PWD}:/tf bridgecrew/checkov -d /tf
 	@echo "[OK] Checkov Checking Completed!"
 
+clean:
+	@echo "Removing .tfstate files..."
+	@rm -fv *.tfstate examples/*.tfstate
+	@rm -fv *.tfstate.* examples/*.tfstate.*
+	@echo "[OK] .tfstate files removed"
+
 compliance: plan 
 	@echo "Checking Compliance..."
 	@docker run --rm -v ${PWD}:/target -i -t \
@@ -48,10 +54,16 @@ plan:
 
 terratest:
 	@echo "Running Tests..."
-	@cd ./test; \
+	cd ./test; \
 		aws-vault --debug exec $(AWS_VAULT_PROFILE) --no-session -- go test -v;\
 		cd ../
 	@echo "[OK] Tests Completed!"
+
+terratest-clean:
+	@echo "Cleaning up Organisation created in Tests..."
+	@aws-vault --debug exec $(AWS_VAULT_PROFILE) --no-session -- aws \
+		organizations delete-organization
+	@echo "[OK] Test Organisation Deleted!"
 
 validate: fmt lint
 	@echo "Validating Terraform..."
@@ -62,4 +74,4 @@ validate: fmt lint
 	@terraform validate ./examples
 	@echo "[OK] Validation Completed!"
 
-PHONY: all check compliance deep_lint docs fmt lint plan terratest validate 
+PHONY: all check clean compliance deep_lint docs fmt lint plan terratest terratest-clean validate 

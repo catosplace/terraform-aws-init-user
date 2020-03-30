@@ -1,3 +1,10 @@
-.terraform
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Local Plans
 plan.out*
-terraform.state*
+
