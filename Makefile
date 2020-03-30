@@ -2,7 +2,7 @@ AWS_VAULT_PROFILE=devops
 
 default: validate 
 
-all: validate check compliance terratest docs
+all: validate check compliance terratest terratest-clean clean docs
 
 check:
 	@echo "Checking with Checkov..."
@@ -13,7 +13,10 @@ clean:
 	@echo "Removing .tfstate files..."
 	@rm -fv *.tfstate examples/*.tfstate
 	@rm -fv *.tfstate.* examples/*.tfstate.*
-	@echo "[OK] .tfstate files removed"
+	@echo "[OK] .tfstate files removed!"
+	@echo "Removing Plan files..."
+	@rm -fv plan.out
+	@echo "[OK] Plan files Removed!"
 
 compliance: plan 
 	@echo "Checking Compliance..."
